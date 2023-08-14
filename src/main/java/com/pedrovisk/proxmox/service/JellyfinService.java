@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class JellyfinDisconnectService {
+public class JellyfinService {
     public static final String SHUTDOWN_MESSAGE = "Server will shutdown in minutes play something if you don't want it to shutdown!!";
 
     @Autowired

@@ -8,13 +8,17 @@ import org.springframework.stereotype.Component;
 public class Scheduler {
 
     @Autowired
-    JellyfinDisconnectService jellyfinDisconnectService;
+    JellyfinService jellyfinService;
+
+    @Autowired
+    ProxmoxService proxmoxService;
 
     @Scheduled(cron = "${cron.expression}")
     public void shutdownJob() {
 
-        if (jellyfinDisconnectService.canShutdown()) {
+        if (jellyfinService.canShutdown()) {
             System.out.println("Shutting down");
+            proxmoxService.shutdownNode();
             return;
         }
 

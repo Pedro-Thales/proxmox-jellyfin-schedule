@@ -30,19 +30,13 @@ Spring knows implicitly to look for env_variables of the same name as property w
 ## Build
 ### Requirements
 
-In order to use this project you need to create a properties file called: 'secrets.properties'.
-
-This file must contain these required properties:
+In order to use this project you need to create these environment variables:
 ```
-jellyfin.api-url=https://jellyfinapi-url.com/ 
-jellyfin.auth-token=Token
-
-proxmox.api-url=https://proxmoxapi-url.com/
-proxmox.auth-token=Token
+JELLYFIN_API-URL=https://jellyfinapi-url.com/ 
+JELLYFIN_AUTH-TOKEN=Token
+PROXMOX_API-URL=https://proxmoxapi-url.com/
+PROXMOX_AUTH-TOKEN=Token
 ```
-
-You must change the values of those properties to the correct value that works for you.
-
 
 ### For further build information read the file HELP.md
 
