@@ -514,10 +514,7 @@
   "name":"com.pedrovisk.proxmox.api.JellyfinApi",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[
-    {"name":"getAllSessions","parameterTypes":[] }, 
-    {"name":"sendMessage","parameterTypes":["java.lang.String","com.pedrovisk.proxmox.models.jellyfin.MessageRequest"] }
-  ]
+  "methods":[{"name":"getAllSessions","parameterTypes":[] }]
 },
 {
   "name":"com.pedrovisk.proxmox.api.JellyfinRequestInterceptor",
@@ -531,10 +528,19 @@
 },
 {
   "name":"com.pedrovisk.proxmox.api.ProxmoxApi",
-  "queryAllDeclaredMethods":true
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"shutdownNode","parameterTypes":["com.pedrovisk.proxmox.models.proxmox.CommandRequest"] }]
 },
 {
-  "name":"com.pedrovisk.proxmox.api.ProxmoxRequestInterceptor"
+  "name":"com.pedrovisk.proxmox.api.ProxmoxRequestInterceptor",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"apply","parameterTypes":["feign.RequestTemplate"] }
+  ]
 },
 {
   "name":"com.pedrovisk.proxmox.configuration.JellyfinProperties",
@@ -561,13 +567,16 @@
   ]
 },
 {
-  "name":"com.pedrovisk.proxmox.models.jellyfin.MessageRequest"
-},
-{
   "name":"com.pedrovisk.proxmox.models.jellyfin.PlayState"
 },
 {
   "name":"com.pedrovisk.proxmox.models.jellyfin.Session"
+},
+{
+  "name":"com.pedrovisk.proxmox.models.proxmox.CommandRequest"
+},
+{
+  "name":"com.pedrovisk.proxmox.models.proxmox.Root"
 },
 {
   "name":"com.pedrovisk.proxmox.repository.SessionsInMemoryRepository",
@@ -585,14 +594,29 @@
   "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
 },
 {
-  "name":"com.pedrovisk.proxmox.service.JellyfinDisconnectService",
+  "name":"com.pedrovisk.proxmox.service.JellyfinService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.pedrovisk.proxmox.service.JellyfinDisconnectService$$SpringCGLIB$$0",
+  "name":"com.pedrovisk.proxmox.service.JellyfinService$$SpringCGLIB$$0",
+  "fields":[
+    {"name":"CGLIB$CALLBACK_FILTER"}, 
+    {"name":"CGLIB$FACTORY_DATA"}
+  ],
+  "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
+},
+{
+  "name":"com.pedrovisk.proxmox.service.ProxmoxService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.pedrovisk.proxmox.service.ProxmoxService$$SpringCGLIB$$0",
   "fields":[
     {"name":"CGLIB$CALLBACK_FILTER"}, 
     {"name":"CGLIB$FACTORY_DATA"}
@@ -2079,14 +2103,8 @@
   "methods":[{"name":"<init>","parameterTypes":["org.springframework.boot.logging.DeferredLogFactory","org.springframework.boot.ConfigurableBootstrapContext"] }]
 },
 {
-  "name":"org.springframework.boot.context.config.ConfigDataLocation",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"of","parameterTypes":["java.lang.String"] }]
-},
-{
   "name":"org.springframework.boot.context.config.ConfigDataProperties",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["java.util.List","org.springframework.boot.context.config.ConfigDataProperties$Activate"] }]
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"org.springframework.boot.context.config.ConfigTreeConfigDataLoader",

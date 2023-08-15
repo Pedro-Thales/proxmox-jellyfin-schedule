@@ -26,7 +26,10 @@
       "pattern":"\\Qcom/pedrovisk/proxmox/repository/SessionsInMemoryRepository.class\\E"
     }, 
     {
-      "pattern":"\\Qcom/pedrovisk/proxmox/service/JellyfinDisconnectService.class\\E"
+      "pattern":"\\Qcom/pedrovisk/proxmox/service/JellyfinService.class\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/pedrovisk/proxmox/service/ProxmoxService.class\\E"
     }, 
     {
       "pattern":"\\Qcom/pedrovisk/proxmox/service/Scheduler.class\\E"
@@ -447,9 +450,6 @@
     }, 
     {
       "pattern":"\\Qorg/springframework/core/Ordered.class\\E"
-    }, 
-    {
-      "pattern":"\\Qsecrets.properties\\E"
     }
   ]},
   "bundles":[]

@@ -36,13 +36,34 @@ It is also possible to run your tests in a native image.
 If you're already familiar with Spring Boot container images support, this is the easiest way to get started.
 Docker should be installed and configured on your machine prior to creating the image.
 
-To create the image, run the following goal:
+#### To create the native image:
+
+First create the environment variables for the container:
+
+```
+Linux: 
+export JELLYFIN_API_URL=http://localhost:8096/
+export JELLYFIN_AUTH_TOKEN=token
+export PROXMOX_API_URL=https://localhost:8006/api2/json/
+export PROXMOX_AUTH_TOKEN=token
+export PROXMOX_API_ENABLE_SHUTDOWN=false
+```
+```
+Windows:
+set JELLYFIN_API_URL=http://localhost:8096/
+set JELLYFIN_AUTH_TOKEN=token
+set PROXMOX_API_URL=https://localhost:8006/api2/json/
+set PROXMOX_AUTH_TOKEN=token
+set PROXMOX_API_ENABLE_SHUTDOWN=false
+
+```
+Then run the following maven goal
 
 ```
 $ ./mvnw spring-boot:build-image -Pnative
 ```
 
-Then, you can run the app like any other container:
+Then, you can run the app like any other container and override the environment variables with any value:
 
 ```
 $ docker run --rm -p 8080:8080 proxmox:0.0.1-SNAPSHOT
