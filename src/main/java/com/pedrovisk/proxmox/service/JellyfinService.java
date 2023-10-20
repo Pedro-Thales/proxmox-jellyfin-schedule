@@ -5,6 +5,7 @@ import com.pedrovisk.proxmox.api.JellyfinApi;
 import com.pedrovisk.proxmox.configuration.JellyfinProperties;
 import com.pedrovisk.proxmox.models.jellyfin.MessageRequest;
 import com.pedrovisk.proxmox.models.jellyfin.PlayState;
+import com.pedrovisk.proxmox.models.jellyfin.Session;
 import com.pedrovisk.proxmox.repository.SessionsInMemoryRepository;
 import com.pedrovisk.proxmox.utils.MeasureRunTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Service
 public class JellyfinService {
-    public static final String SHUTDOWN_MESSAGE = "Server will shutdown in minutes play something if you don't want it to shutdown!!";
+    public static final String SHUTDOWN_MESSAGE = "Server will shutdown play something if you don't want it to shutdown!!";
 
     @Autowired
     JellyfinApi jellyfinApi;
@@ -35,17 +36,25 @@ public class JellyfinService {
         var sessions = jellyfinApi.getAllSessions();
         List<Boolean> sessionsResults = new ArrayList<>();
 
-        sessions.forEach(session -> {
+        for (Session session : sessions){
+
             System.out.println("Checking session of user: " + session.getUserName());
+            var savedSession = sessionRepository.get(session.getId());
+            if (savedSession == null) {
+                sessionRepository.insert(session.getId(), new Date());
+                sessionsResults.add(false);
+                continue;
+            }
+
+            var expired = savedSession.toInstant().isBefore(
+                    Instant.now().minus(jellyfinProperties.pausedSessionTimeout(), ChronoUnit.MINUTES));
 
             if (isSessionStopped(session.playState)) {
                 System.out.println("Session: " + session.getId() + "IS STOPPED");
-                jellyfinApi.sendMessage(session.getId(), MessageRequest.builder()
-                        .text(SHUTDOWN_MESSAGE)
-                        .timeoutMs(10000).build());
-                sessionsResults.add(true);
-
+                sendShutdownMessage(session);
+                sessionsResults.add(expired);
             }
+
             if (isSessionPlaying(session.playState)) {
                 System.out.println("Session: " + session.getId() + "IS PLAYING");
                 sessionsResults.add(false);
@@ -53,30 +62,23 @@ public class JellyfinService {
             }
 
             if (isSessionPaused(session.playState)) {
-
                 System.out.println("Session: " + session.getId() + "IS PAUSED");
-                jellyfinApi.sendMessage(session.getId(), MessageRequest.builder()
-                        .text(SHUTDOWN_MESSAGE)
-                        .timeoutMs(10000).build());
-                var savedSession = sessionRepository.get(session.getId());
-                if (savedSession == null) {
-                    sessionRepository.insert(session.getId(), new Date());
-                    sessionsResults.add(false);
-                } else {
-                    var expired = savedSession.toInstant().isBefore(
-                            Instant.now().minus(jellyfinProperties.pausedSessionTimeout(), ChronoUnit.MINUTES));
-                    System.out.println("Expired? " + expired);
-                    sessionsResults.add(expired);
-
-                }
+                sendShutdownMessage(session);
+                sessionsResults.add(expired);
             }
 
-        });
+        }
 
         sessions.clear();
 
         return !sessionsResults.contains(false);
 
+    }
+
+    private void sendShutdownMessage(Session session) {
+        jellyfinApi.sendMessage(session.getId(), MessageRequest.builder()
+                .text(SHUTDOWN_MESSAGE)
+                .timeoutMs(10000).build());
     }
 
     public boolean isSessionPlaying(PlayState playState) {

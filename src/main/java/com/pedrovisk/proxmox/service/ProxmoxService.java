@@ -14,14 +14,12 @@ public class ProxmoxService {
     ProxmoxApi proxmoxApi;
 
     @MeasureRunTime
-    public boolean shutdownNode() {
+    public void shutdownNode() {
 
         try {
-            proxmoxApi.shutdownNode(new CommandRequest("shutdown"));
-            return true;
+            proxmoxApi.shutdownNode(new CommandRequest("h"));
         } catch (Exception e) {
             System.out.println("Exception = " + e);
-            return false;
         }
 
     }
