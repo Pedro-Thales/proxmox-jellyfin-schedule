@@ -17,7 +17,7 @@ public class ProxmoxService {
     public void shutdownNode() {
 
         try {
-            proxmoxApi.shutdownNode(new CommandRequest("h"));
+            proxmoxApi.shutdownNode(new CommandRequest("shutdown"));
         } catch (Exception e) {
             System.out.println("Exception = " + e);
         }
