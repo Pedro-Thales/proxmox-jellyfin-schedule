@@ -8,6 +8,7 @@ import com.pedrovisk.proxmox.models.jellyfin.PlayState;
 import com.pedrovisk.proxmox.models.jellyfin.Session;
 import com.pedrovisk.proxmox.repository.SessionsInMemoryRepository;
 import com.pedrovisk.proxmox.utils.MeasureRunTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class JellyfinService {
     public static final String SHUTDOWN_MESSAGE = "Server will shutdown play something if you don't want it to shutdown!!";
 
@@ -38,7 +40,7 @@ public class JellyfinService {
 
         for (Session session : sessions){
 
-            System.out.println("Checking session of user: " + session.getUserName());
+            log.info("Checking session of user: " + session.getUserName());
             var savedSession = sessionRepository.get(session.getId());
             if (savedSession == null) {
                 sessionRepository.insert(session.getId(), new Date());
@@ -50,19 +52,19 @@ public class JellyfinService {
                     Instant.now().minus(jellyfinProperties.pausedSessionTimeout(), ChronoUnit.MINUTES));
 
             if (isSessionStopped(session.playState)) {
-                System.out.println("Session: " + session.getId() + "IS STOPPED");
+                log.info("Session: " + session.getId() + "IS STOPPED");
                 sendShutdownMessage(session);
                 sessionsResults.add(expired);
             }
 
             if (isSessionPlaying(session.playState)) {
-                System.out.println("Session: " + session.getId() + "IS PLAYING");
+                log.info("Session: " + session.getId() + "IS PLAYING");
                 sessionsResults.add(false);
                 sessionRepository.remove(session.getId());
             }
 
             if (isSessionPaused(session.playState)) {
-                System.out.println("Session: " + session.getId() + "IS PAUSED");
+                log.info("Session: " + session.getId() + "IS PAUSED");
                 sendShutdownMessage(session);
                 sessionsResults.add(expired);
             }
