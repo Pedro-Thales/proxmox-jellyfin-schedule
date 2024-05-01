@@ -40,7 +40,7 @@ public class JellyfinService {
 
         for (Session session : sessions){
 
-            log.info("Checking session of user: " + session.getUserName());
+            log.info("Checking session of user: {}", session.getUserName());
             var savedSession = sessionRepository.get(session.getId());
             if (savedSession == null) {
                 sessionRepository.insert(session.getId(), new Date());
@@ -52,19 +52,19 @@ public class JellyfinService {
                     Instant.now().minus(jellyfinProperties.pausedSessionTimeout(), ChronoUnit.MINUTES));
 
             if (isSessionStopped(session.playState)) {
-                log.info("Session: " + session.getId() + "IS STOPPED");
+                log.info("Session: {} IS STOPPED! Is it expired? {}", session.getId(), expired);
                 sendShutdownMessage(session);
                 sessionsResults.add(expired);
             }
 
             if (isSessionPlaying(session.playState)) {
-                log.info("Session: " + session.getId() + "IS PLAYING");
+                log.info("Session: {} IS PLAYING", session.getId());
                 sessionsResults.add(false);
                 sessionRepository.remove(session.getId());
             }
 
             if (isSessionPaused(session.playState)) {
-                log.info("Session: " + session.getId() + "IS PAUSED");
+                log.info("Session: {} IS PAUSED! Is it expired? {}", session.getId(), expired);
                 sendShutdownMessage(session);
                 sessionsResults.add(expired);
             }
