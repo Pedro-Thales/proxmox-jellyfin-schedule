@@ -78,9 +78,14 @@ public class JellyfinService {
     }
 
     private void sendShutdownMessage(Session session) {
-        jellyfinApi.sendMessage(session.getId(), MessageRequest.builder()
-                .text(SHUTDOWN_MESSAGE)
-                .timeoutMs(10000).build());
+
+        try {
+            jellyfinApi.sendMessage(session.getId(), MessageRequest.builder()
+                    .text(SHUTDOWN_MESSAGE)
+                    .timeoutMs(10000).build());
+        } catch (Exception e) {
+            log.error("Not able to send message to the user", e);
+        }
     }
 
     public boolean isSessionPlaying(PlayState playState) {
